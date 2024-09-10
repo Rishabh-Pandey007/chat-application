@@ -1,25 +1,88 @@
-import React from 'react'
-import { Container, Paper } from '@mui/material'
+import React from "react";
+import { Container, Paper, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 
 const Login = () => {
 
-    const [isLogin, setIsLogin] = useState(true);
+  console.log('Login.jsx');
+  
+  const [isLogin, setIsLogin] = useState(true);
 
-  return <Container component={"main"} maxWidth={"sx"}>
-    <Paper elevation={3} sx={{
-        padding: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        // marginTop: 8
+  const toogleLogin = () => setIsLogin(false)
+
+  return (
+    <Container component={"main"} maxWidth='xs' sx={{
+      height: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
     }}>
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 2,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          // marginTop: 8
+        }}
+      >
+        {isLogin ? (
+          <>
+            <Typography variant="h5">Login</Typography>
+            <form style={{
+              width: "100%",
+              marginTop: "1rem",
+            }}>
+              <TextField
+                required
+                fullWidth
+                label="Username"
+                margin="normal"
+                variant="outlined"
+              />
 
-        {
-            isLogin ? <span>Login</span> : <span>Register</span>
-        }
+              <TextField
+                required
+                fullWidth
+                label="password"
+                type="password"
+                margin="normal"
+                variant="outlined"
+              />
 
-    </Paper>
-  </Container>
-}
+              <button
+                sx={{
+                  marginTop: "1rem",
+                }}
+                variant="contained"
+                color="primary"
+                type="submit"
+                fullWidth
+              >
+                Login
+              </button>
 
-export default Login
+              <Typography textAlign={'center'}>OR</Typography>
+
+              <button
+                sx={{
+                  marginTop: "1rem",
+                }}
+                type="button"
+                variant="contained"
+                color="secondary"
+                onClick={toogleLogin}
+              />
+
+            </form>
+          </>
+        ) : (
+          <span>Register</span>
+        )}
+      </Paper>
+    </Container>
+  );
+};
+
+export default Login;
