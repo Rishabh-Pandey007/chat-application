@@ -73,7 +73,10 @@ const Login = () => {
                 variant="contained"
                 color="secondary"
                 onClick={toogleLogin}
-              />
+                >
+                  Sign Up Instead
+                </button>
+              {/* /> */}
 
             </form>
           </>
