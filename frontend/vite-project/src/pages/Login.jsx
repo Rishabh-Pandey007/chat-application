@@ -21,6 +21,9 @@ import { userExists } from "../redux/reducers/auth";
 import { usernameValidator } from "../utils/validators";
 
 const Login = () => {
+
+  const dispatch = useDispatch();
+
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,7 +36,7 @@ const Login = () => {
 
   const avatar = useFileHandler("single");
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
     e.preventDefault();
