@@ -50,7 +50,7 @@ const App = () => {
               </SocketProvider>
             }
           >
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Home />} />
             <Route path="/chat/:chatId" element={<Chat />} />
             <Route path="/groups" element={<Groups />} />
           </Route>
