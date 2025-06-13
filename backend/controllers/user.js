@@ -6,7 +6,7 @@ import { TryCatch } from "../middlewares/error.js";
 import { ErrorHandler } from "../utils/utility.js";
 import { cookieOptions } from "../utils/features.js";
 import { newGroupChat } from "./chat.js";
-import { Chat } from '../models/chats.js';
+import { Chat } from "../models/chats.js";
 import {Request} from "../models/request.js";
 import { NEW_REQUEST, REFETCH_CHATS } from "../constants/events.js";
 import e from "express";
@@ -201,15 +201,22 @@ const getMyNotifications = TryCatch(async(req, res,) => {
 
 
 const getMyFriends = TryCatch(async(req, res,) => {
+        
 
     const chatId = req.query.chatId;
 
-    const chat = await Chat.findById({
+    const chats = await Chat.find({
         members: req.user,
         groupChat: false,
     }).populate("members", "name avatar");
 
-    const friends = chat.members.map(({members})=>{
+    console.log("Request User:", req.user);
+console.log("Chat ID:", req.query.chatId);
+
+    // console.log(chats,'chat');
+     
+
+    const friends = chats.map(({members})=>{
         
         const otherUser = getOtherMember(members, req.user);
 
@@ -217,8 +224,11 @@ const getMyFriends = TryCatch(async(req, res,) => {
             _id: otherUser._id,
             name: otherUser.name,
             avatar: otherUser.avatar.url,
-        }
+        };
     });
+
+    // console.log(friends,'friends');
+    
 
     if(chatId) {
 
@@ -234,7 +244,7 @@ const getMyFriends = TryCatch(async(req, res,) => {
             });
          
     } else {
-        
+         
         return res.status(200).json({
             success: true,
             friends,
@@ -243,6 +253,64 @@ const getMyFriends = TryCatch(async(req, res,) => {
    
 });
 
+
+
+// const getMyFriends = TryCatch(async (req, res) => {
+//     try {
+//         console.log("Debugging getMyFriends:");
+//         console.log("Request User:", req.user);
+//         console.log("Chat ID from Query:", req.query.chatId);
+
+//         const chats = await Chat.find({
+//             members: req.user._id,
+//             groupChat: false,
+//         }).populate("members", "name avatar");
+
+//         console.log("Fetched Chats:", chats);
+
+//         const friends = chats.map(({ members }) => {
+//             const otherUser = getOtherMember(members, req.user._id);
+//             console.log("Other User in Chat:", otherUser);
+
+//             return {
+//                 _id: otherUser._id,
+//                 name: otherUser.name,
+//                 avatar: otherUser.avatar.url,
+//             };
+//         });
+
+//         if (req.query.chatId) {
+//             if (!mongoose.Types.ObjectId.isValid(req.query.chatId)) {
+//                 console.error("Invalid Chat ID:", req.query.chatId);
+//                 return res.status(400).json({ success: false, message: "Invalid chat ID" });
+//             }
+
+//             const chat = await Chat.findById(req.query.chatId);
+//             console.log("Fetched Chat by ID:", chat);
+
+//             const availableFriends = friends.filter(
+//                 (friend) => !chat.members.some((memberId) => memberId.toString() === friend._id.toString())
+//             );
+
+//             console.log("Available Friends:", availableFriends);
+
+//             return res.status(200).json({
+//                 success: true,
+//                 friends: availableFriends,
+//             });
+//         } else {
+//             console.log("All Friends:", friends);
+
+//             return res.status(200).json({
+//                 success: true,
+//                 friends,
+//             });
+//         }
+//     } catch (error) {
+//         console.error("Error in getMyFriends:", error);
+//         throw error;
+//     }
+// });
 
 export {
     login, 

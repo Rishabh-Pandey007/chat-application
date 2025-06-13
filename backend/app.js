@@ -7,6 +7,9 @@ import { errorMiddleware } from "./middlewares/error.js";
 import cookieParser from "cookie-parser";
 import userRoute from './routes/user.js';
 import chatRoute from './routes/chat.js';
+import adminRoute from './routes/admin.js';
+
+
 import { createMessagesInChat } from "./seeders/chat.js";
 
 dotenv.config({
@@ -17,6 +20,8 @@ dotenv.config({
 // const server= new createServer(app); 
 const mongoURI = process.env.MONGO_URI;
 const port =process.env.PORT || 3000;
+export const adminSecretKey =process.env.ADMIN_SECRET_KEY || "HeyProgrammer";
+
 
 connectDB(mongoURI);
 
@@ -34,6 +39,7 @@ app.use(cookieParser());
 
 app.use("/user",userRoute);
 app.use("/chat",chatRoute);
+app.use("/admin",adminRoute);
 
 app.get( "/" , (req, res)=>{
     res.send("Hello World!");
