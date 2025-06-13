@@ -31,7 +31,7 @@ const registerValidator = () => [
     body("username", "Username is required").notEmpty(),
     body("password", "Password is required").notEmpty(),
     body("bio", "Bio is required").notEmpty(),
-    check("avatar","Please Upload Avatar").notEmpty(),
+    // check("avatar","Please Upload Avatar").notEmpty(),
 
 ];
 
