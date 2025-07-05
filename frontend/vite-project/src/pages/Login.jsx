@@ -72,6 +72,9 @@ const Login = () => {
       toast.success(data.message, {
         id: toastId,
       });
+
+      // redirect to home or dashboard
+      window.location.href = "/"; // Adjust the redirect path as needed
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something Went Wrong", {
         id: toastId,
