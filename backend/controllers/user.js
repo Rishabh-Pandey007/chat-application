@@ -114,6 +114,10 @@ const sendFriendRequest = TryCatch(async(req, res, next) => {
 
     const {userId} = req.body;
 
+    // find user from userId
+    const user = await User.findById(userId);
+    if(!user) return next(new ErrorHandler("User not found", 404));
+
     const request = await Request.findOne({
         $or: [
             {sender: req.user, receiver: userId},
