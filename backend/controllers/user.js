@@ -1,6 +1,6 @@
 import { compare } from "bcrypt";
 import {User} from "../models/user.js";
-import { emitEvent, sendToken } from "../utils/features.js";
+import { emitEvent, sendToken, uploadFilesToCloudinary } from "../utils/features.js";
 import { fa, fr, ne } from "@faker-js/faker";
 import { TryCatch } from "../middlewares/error.js";
 import { ErrorHandler } from "../utils/utility.js";
@@ -13,35 +13,33 @@ import e from "express";
 import { getOtherMember } from "../lib/helper.js";
 
 //Create a new user and save it to the database and save in cookie
-const newUser= async(req, res, next)=>{
-
-    const {name, username, password, bio}= req.body;
-
-    const avatar = {
-        public_id:"sdfsd",
-        url:"asdf",
-    };
+const newUser = TryCatch(async(req, res, next) =>{
+    const {name, username, password, bio} = req.body;
 
     // fetch if user already exists
     const userExist = await User.findOne({username});
+    if(userExist) return next(new ErrorHandler("Username already taken", 400));
 
-    if(userExist)
-    return res.status(400).json({error:"User already exists"});
-    
+    const file = req.file;
+    if(!file) return next(new ErrorHandler("Please upload an avatar", 400));
 
-    const user = await User.create(
-        {
-            name,
-            bio, 
-            username, 
-            password,
-            avatar,
-        });
-    
-      
-       sendToken(res, user, 201, "User created");
-        
-};
+    const result = await uploadFilesToCloudinary([file]);
+
+    const avatar ={
+        public_id: result[0].public_id,
+        url: result[0].url,
+    };
+
+    const user = await User.create({
+        name,
+        bio,
+        username,
+        password,
+        avatar
+    });
+
+    sendToken( res, user, 201, "User created")
+});
 
 // Login user and save token in cookie
 const login= TryCatch(async(req, res, next)=>{

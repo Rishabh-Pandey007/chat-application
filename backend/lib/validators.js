@@ -21,18 +21,10 @@ const validateHandler = (req, res, next) => {
 
 
 const registerValidator = () => [
-
-    // body(["name", "username", "password", "bio"]).notEmpty(),
-    //  body("name").not().isEmpty().withMessage("Name is required"),
-    // body("username").not().isEmpty().withMessage("Username is required"),
-    // body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
-    // body("bio").not().isEmpty().withMessage("Bio is required"),
-    body("name", "Name is required").notEmpty(),
-    body("username", "Username is required").notEmpty(),
-    body("password", "Password is required").notEmpty(),
-    body("bio", "Bio is required").notEmpty(),
-    // check("avatar","Please Upload Avatar").notEmpty(),
-
+  body("name", "Please Enter Name").notEmpty(),
+  body("username", "Please Enter Username").notEmpty(),
+  body("bio", "Please Enter Bio").notEmpty(),
+  body("password", "Please Enter Password").notEmpty(),
 ];
 
 
